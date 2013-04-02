@@ -10,9 +10,10 @@
 
         var target = this;
         var body = $('body');
+        var currentTop;
 
         // Make sure we can move target around
-        target.css('position', 'absolute');
+        target.css('position', 'fixed');
 
         // Add animation, if need be
         if (settings.animate) {
@@ -27,7 +28,11 @@
 
         function updatePosition() {
             // TODO: Update to use translateY instead of top in modern browsers
-            target.css('top', Math.min((body.height() - (settings.bottom.height() + target.height() + settings.fromBottom)), Math.max((settings.top.height() + settings.fromTop), (window.scrollY + settings.viewportPadding))));
+            var top = Math.min((body.height() - window.scrollY - (settings.bottom.height() + target.height() + settings.fromBottom)), Math.max(settings.viewportPadding, settings.top.height() + settings.fromTop - window.scrollY));
+            if (top != currentTop) {
+                currentTop = top;
+                target.css('top', top);
+            }
         }
 
     }
